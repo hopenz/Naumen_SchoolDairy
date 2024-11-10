@@ -3,7 +3,7 @@ services:
     container_name: postgresql-school-dairy
     image: postgres:16
     ports:
-      - "5435:5432"
+      - "5434:5432"
     environment:
       POSTGRES_DB: school-dairy-db
       POSTGRES_USER: postgres
