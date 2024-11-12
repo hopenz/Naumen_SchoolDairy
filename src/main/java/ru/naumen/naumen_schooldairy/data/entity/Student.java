@@ -38,7 +38,7 @@ public class Student {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "class_id")
-    private SchoolClass classField;
+    private SchoolClass schoolClass;
 
     @OneToMany(mappedBy = "student")
     private Set<Mark> marks = new LinkedHashSet<>();

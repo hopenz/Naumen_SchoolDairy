@@ -27,7 +27,7 @@ public class SchoolClass {
     @OneToMany(mappedBy = "classField")
     private Set<DailySchedule> dailySchedules = new LinkedHashSet<>();
 
-    @OneToMany(mappedBy = "classField")
+    @OneToMany(mappedBy = "schoolClass")
     private Set<Student> students = new LinkedHashSet<>();
 
 }
