@@ -8,8 +8,10 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.naumen.naumen_schooldairy.data.dto.student.RequestStudentDto;
 import ru.naumen.naumen_schooldairy.data.dto.student.ResponseStudentDto;
+import ru.naumen.naumen_schooldairy.data.dto.student.ResponseStudentWithScheduleDto;
 import ru.naumen.naumen_schooldairy.service.StudentService;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @RestController
@@ -46,6 +48,14 @@ public class StudentController {
             @RequestBody @Validated RequestStudentDto requestStudentDto) {
         ResponseStudentDto createdStudent = studentService.createStudent(requestStudentDto);
         return ResponseEntity.ok(createdStudent);
+    }
+
+    @GetMapping("/lesson")
+    public ResponseEntity<ResponseStudentWithScheduleDto> getStudentByIdAndDate(
+            @NotNull @Positive @RequestParam("id")Long id,
+            @NotNull @RequestParam("date") LocalDate date){
+        ResponseStudentWithScheduleDto studentSchedule = studentService.getStudentByIdAndDate(id, date);
+        return ResponseEntity.ok(studentSchedule);
     }
 
 }

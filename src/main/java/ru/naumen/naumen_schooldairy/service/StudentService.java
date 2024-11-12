@@ -5,11 +5,13 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.naumen.naumen_schooldairy.data.dto.student.RequestStudentDto;
 import ru.naumen.naumen_schooldairy.data.dto.student.ResponseStudentDto;
+import ru.naumen.naumen_schooldairy.data.dto.student.ResponseStudentWithScheduleDto;
 import ru.naumen.naumen_schooldairy.data.entity.Student;
-import ru.naumen.naumen_schooldairy.data.mapper.StudentMapper;
+import ru.naumen.naumen_schooldairy.data.mapper.student.StudentMapper;
 import ru.naumen.naumen_schooldairy.data.repository.StudentRepository;
 import ru.naumen.naumen_schooldairy.exception.EntityNotFoundException;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Service
@@ -58,6 +60,12 @@ public class StudentService {
         Student student = studentMapper.toEntity(requestStudentDto);
         Student studentDb = studentRepository.save(student);
         return studentMapper.toResponseDto(studentDb);
+    }
+
+    @Transactional
+    public ResponseStudentWithScheduleDto getStudentByIdAndDate(Long studentId, LocalDate dateDay) {
+        Student studentDb = studentRepository.findStudentByIdAndDate(studentId, dateDay);
+        return studentMapper.toResponseWithSchedule(studentDb);
     }
 
 }
