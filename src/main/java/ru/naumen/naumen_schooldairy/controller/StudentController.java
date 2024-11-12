@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import ru.naumen.naumen_schooldairy.data.dto.student.RequestStudentDto;
 import ru.naumen.naumen_schooldairy.data.dto.student.ResponseStudentDto;
 import ru.naumen.naumen_schooldairy.data.dto.student.ResponseStudentWithScheduleDto;
+import ru.naumen.naumen_schooldairy.data.dto.student.ResponseStudentWithSubjectsAndMarksDto;
 import ru.naumen.naumen_schooldairy.service.StudentService;
 
 import java.time.LocalDate;
@@ -37,7 +38,7 @@ public class StudentController {
 
     @PutMapping("/{id}")
     public ResponseEntity<ResponseStudentDto> updateStudent(
-            @NotNull @Positive @PathVariable("id")Long id,
+            @NotNull @Positive @PathVariable("id") Long id,
             @RequestBody @Validated RequestStudentDto requestStudentDto) {
         ResponseStudentDto updateStudent = studentService.updateStudent(id, requestStudentDto);
         return ResponseEntity.ok(updateStudent);
@@ -52,10 +53,17 @@ public class StudentController {
 
     @GetMapping("/lesson")
     public ResponseEntity<ResponseStudentWithScheduleDto> getStudentByIdAndDate(
-            @NotNull @Positive @RequestParam("id")Long id,
-            @NotNull @RequestParam("date") LocalDate date){
+            @NotNull @Positive @RequestParam("id") Long id,
+            @NotNull @RequestParam("date") LocalDate date) {
         ResponseStudentWithScheduleDto studentSchedule = studentService.getStudentByIdAndDate(id, date);
         return ResponseEntity.ok(studentSchedule);
+    }
+
+    @GetMapping("/subjectsAndMarks")
+    public ResponseEntity<ResponseStudentWithSubjectsAndMarksDto> getSubjectsAndMarks(
+            @NotNull @Positive @RequestParam("id") Long id) {
+        ResponseStudentWithSubjectsAndMarksDto studentSubjectMark = studentService.getSubjectsAndMarks(id);
+        return ResponseEntity.ok(studentSubjectMark);
     }
 
 }

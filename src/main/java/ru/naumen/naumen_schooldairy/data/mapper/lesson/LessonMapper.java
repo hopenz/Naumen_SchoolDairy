@@ -14,5 +14,5 @@ public interface LessonMapper {
     @Mapping(target = "responseMarkDto", source = "marks")
     @Mapping(target = "responseSubjectDto", source = "subject")
     @Mapping(target = "responseHomeworkDto", source = "homework")
-    ResponseLessonDto toResponseDto (Lesson lesson);
+    ResponseLessonDto toResponseDto(Lesson lesson);
 }

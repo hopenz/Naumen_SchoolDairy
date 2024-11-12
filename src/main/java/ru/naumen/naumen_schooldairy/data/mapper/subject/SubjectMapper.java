@@ -7,5 +7,5 @@ import ru.naumen.naumen_schooldairy.data.entity.Subject;
 @Mapper(componentModel = "spring")
 public interface SubjectMapper {
 
-    ResponseSubjectDto toResponseDto (Subject subject);
+    ResponseSubjectDto toResponseDto(Subject subject);
 }

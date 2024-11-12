@@ -6,6 +6,7 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.naumen.naumen_schooldairy.data.dto.student.RequestStudentDto;
 import ru.naumen.naumen_schooldairy.data.dto.student.ResponseStudentDto;
 import ru.naumen.naumen_schooldairy.data.dto.student.ResponseStudentWithScheduleDto;
+import ru.naumen.naumen_schooldairy.data.dto.student.ResponseStudentWithSubjectsAndMarksDto;
 import ru.naumen.naumen_schooldairy.data.entity.Student;
 import ru.naumen.naumen_schooldairy.data.mapper.student.StudentMapper;
 import ru.naumen.naumen_schooldairy.data.repository.StudentRepository;
@@ -23,14 +24,14 @@ public class StudentService {
     private final StudentMapper studentMapper;
 
     @Transactional
-    public List<ResponseStudentDto> getAllStudents(){
+    public List<ResponseStudentDto> getAllStudents() {
         return studentRepository.findAll().stream()
                 .map(studentMapper::toResponseDto)
                 .toList();
     }
 
     @Transactional
-    public ResponseStudentDto updateStudent(Long id, RequestStudentDto requestStudentDto){
+    public ResponseStudentDto updateStudent(Long id, RequestStudentDto requestStudentDto) {
         Student studentDb = studentRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Student", id));
 
@@ -48,7 +49,7 @@ public class StudentService {
     }
 
     @Transactional
-    public ResponseStudentDto getStudentById(Long id){
+    public ResponseStudentDto getStudentById(Long id) {
         Student student = studentRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Student", id));
 
@@ -56,7 +57,7 @@ public class StudentService {
     }
 
     @Transactional
-    public ResponseStudentDto createStudent(RequestStudentDto requestStudentDto){
+    public ResponseStudentDto createStudent(RequestStudentDto requestStudentDto) {
         Student student = studentMapper.toEntity(requestStudentDto);
         Student studentDb = studentRepository.save(student);
         return studentMapper.toResponseDto(studentDb);
@@ -66,6 +67,12 @@ public class StudentService {
     public ResponseStudentWithScheduleDto getStudentByIdAndDate(Long studentId, LocalDate dateDay) {
         Student studentDb = studentRepository.findStudentByIdAndDate(studentId, dateDay);
         return studentMapper.toResponseWithSchedule(studentDb);
+    }
+
+    @Transactional
+    public ResponseStudentWithSubjectsAndMarksDto getSubjectsAndMarks(Long id) {
+        Student studentDb = studentRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Student", id));
+        return studentMapper.toResponseWithSubjectsAndMarks(studentDb);
     }
 
 }

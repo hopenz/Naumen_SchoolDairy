@@ -9,5 +9,6 @@ import java.util.Set;
 
 public record ResponseLessonDto(Long id, Set<ResponseMarkDto> responseMarkDto,
                                 ResponseSubjectDto responseSubjectDto,
-                                Set<ResponseHomeworkDto> responseHomeworkDto, Integer lessonNumber) implements Serializable {
+                                Set<ResponseHomeworkDto> responseHomeworkDto,
+                                Integer lessonNumber) implements Serializable {
 }

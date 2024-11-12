@@ -13,4 +13,5 @@ public interface StudentRepository extends JpaRepository<Student, Long> {
             + "WHERE s.id = :studentId AND ds.dateDay = :dateDay")
     Student findStudentByIdAndDate(@Param("studentId") Long studentId,
                                    @Param("dateDay") LocalDate dateDay);
+
 }

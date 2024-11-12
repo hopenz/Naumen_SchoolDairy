@@ -10,8 +10,8 @@ import ru.naumen.naumen_schooldairy.data.mapper.dailySchedule.DailyScheduleMappe
 @Mapper(componentModel = "spring", uses = {DailyScheduleMapper.class})
 public interface SchoolClassMapper {
 
-    ResponseSchoolClassDto toResponseDto (SchoolClass schoolClass);
+    ResponseSchoolClassDto toResponseDto(SchoolClass schoolClass);
 
     @Mapping(target = "responseDailySchedulesDto", source = "dailySchedules")
-    ResponseSchoolClassWithScheduleDto toResponseWithScheduleDto (SchoolClass schoolClass);
+    ResponseSchoolClassWithScheduleDto toResponseWithScheduleDto(SchoolClass schoolClass);
 }

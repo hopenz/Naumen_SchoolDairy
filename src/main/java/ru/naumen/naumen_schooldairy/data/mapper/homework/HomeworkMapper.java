@@ -7,5 +7,5 @@ import ru.naumen.naumen_schooldairy.data.entity.Homework;
 @Mapper(componentModel = "spring")
 public interface HomeworkMapper {
 
-    ResponseHomeworkDto toResponseDto (Homework homework);
+    ResponseHomeworkDto toResponseDto(Homework homework);
 }
