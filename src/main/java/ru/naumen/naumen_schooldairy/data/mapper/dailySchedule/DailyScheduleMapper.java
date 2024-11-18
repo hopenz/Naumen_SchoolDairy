@@ -6,9 +6,18 @@ import ru.naumen.naumen_schooldairy.data.dto.dailySchedule.ResponseDailySchedule
 import ru.naumen.naumen_schooldairy.data.entity.DailySchedule;
 import ru.naumen.naumen_schooldairy.data.mapper.lesson.LessonMapper;
 
+/**
+ * Mapper для преобразования сущности DailySchedule.
+ */
 @Mapper(componentModel = "spring", uses = {LessonMapper.class})
 public interface DailyScheduleMapper {
 
+    /**
+     * Преобразует сущность DailySchedule в DTO ResponseDailyScheduleDto.
+     *
+     * @param dailySchedule сущность DailySchedule, которую необходимо преобразовать.
+     * @return объект ResponseDailyScheduleDto, представляющий расписание на день.
+     */
     @Mapping(target = "responseLessonDto", source = "lessons")
     ResponseDailyScheduleDto toResponseDto(DailySchedule dailySchedule);
 }
