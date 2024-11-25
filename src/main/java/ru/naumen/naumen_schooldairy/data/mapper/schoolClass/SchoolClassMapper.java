@@ -1,4 +1,4 @@
-package ru.naumen.naumen_schooldairy.data.mapper.schoolClassMapper;
+package ru.naumen.naumen_schooldairy.data.mapper.schoolClass;
 
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;

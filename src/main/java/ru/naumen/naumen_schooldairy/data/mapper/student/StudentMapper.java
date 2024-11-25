@@ -8,7 +8,7 @@ import ru.naumen.naumen_schooldairy.data.dto.student.ResponseStudentWithSchedule
 import ru.naumen.naumen_schooldairy.data.dto.student.ResponseStudentWithSubjectsAndMarksDto;
 import ru.naumen.naumen_schooldairy.data.entity.Student;
 import ru.naumen.naumen_schooldairy.data.mapper.mark.MarkMapper;
-import ru.naumen.naumen_schooldairy.data.mapper.schoolClassMapper.SchoolClassMapper;
+import ru.naumen.naumen_schooldairy.data.mapper.schoolClass.SchoolClassMapper;
 
 /**
  * Mapper для преобразования сущности Student в различные DTO и обратно
