@@ -31,12 +31,6 @@ public class Subject {
     private String name;
 
     /**
-     * Перечень домашних заданий
-     */
-    @OneToMany(mappedBy = "subject")
-    private Set<Homework> homework = new LinkedHashSet<>();
-
-    /**
      * Перечень уроков
      */
     @OneToMany(mappedBy = "subject")

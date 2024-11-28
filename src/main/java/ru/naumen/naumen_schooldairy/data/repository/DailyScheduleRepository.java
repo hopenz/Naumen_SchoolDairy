@@ -1,6 +1,7 @@
 package ru.naumen.naumen_schooldairy.data.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import ru.naumen.naumen_schooldairy.data.entity.DailySchedule;
 
 import java.time.LocalDate;
@@ -9,7 +10,7 @@ import java.time.LocalDate;
  * Репозиторий для работы с сущностью DailySchedule.
  * Предоставляет методы для доступа к данным расписания на день
  */
-public interface DailyScheduleRepository extends JpaRepository<DailySchedule, Long> {
+public interface DailyScheduleRepository extends JpaRepository<DailySchedule, Long>, JpaSpecificationExecutor<DailySchedule> {
 
     /**
      * Находит расписание на день по указанной дате и идентификатору класса.

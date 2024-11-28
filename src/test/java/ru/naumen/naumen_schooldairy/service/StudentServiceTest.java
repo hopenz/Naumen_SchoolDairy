@@ -6,7 +6,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import ru.naumen.naumen_schooldairy.data.dto.student.RequestStudentDto;
-import ru.naumen.naumen_schooldairy.data.dto.student.ResponseStudentDto;
+import ru.naumen.naumen_schooldairy.data.dto.student.ResponseStudentWithClassDto;
 import ru.naumen.naumen_schooldairy.data.entity.Student;
 import ru.naumen.naumen_schooldairy.data.mapper.student.StudentMapper;
 import ru.naumen.naumen_schooldairy.data.repository.StudentRepository;
@@ -54,7 +54,7 @@ public class StudentServiceTest {
     /**
      * Экземпляр DTO ResponseStudentDto.
      */
-    private ResponseStudentDto responseStudentDto;
+    private ResponseStudentWithClassDto responseStudentWithClassDto;
 
     /**
      * Метод, который выполняется перед каждым тестом.
@@ -70,7 +70,7 @@ public class StudentServiceTest {
         requestStudentDto = new RequestStudentDto("Иван", "Иванов", "Иванович",
                 LocalDate.of(2005, 1, 1), "1234567890", "0987654321");
 
-        responseStudentDto = new ResponseStudentDto(1L, "Иван", "Иванов", "Иванович",
+        responseStudentWithClassDto = new ResponseStudentWithClassDto(1L, "Иван", "Иванов", "Иванович",
                 LocalDate.of(2005, 1, 1), "1234567890",
                 "0987654321", null);
     }
@@ -84,11 +84,11 @@ public class StudentServiceTest {
         when(studentRepository.findById(1L)).thenReturn(Optional.of(student));
         when(studentMapper.toEntity(requestStudentDto)).thenReturn(student);
         when(studentRepository.save(student)).thenReturn(student);
-        when(studentMapper.toResponseDto(student)).thenReturn(responseStudentDto);
+        when(studentMapper.toResponseDto(student)).thenReturn(responseStudentWithClassDto);
 
-        ResponseStudentDto result = studentService.updateStudent(1L, requestStudentDto);
+        ResponseStudentWithClassDto result = studentService.updateStudent(1L, requestStudentDto);
 
-        assertEquals(responseStudentDto, result);
+        assertEquals(responseStudentWithClassDto, result);
         verify(studentRepository).findById(1L);
         verify(studentRepository).save(student);
     }
@@ -101,11 +101,11 @@ public class StudentServiceTest {
     public void testCreateStudent() {
         when(studentMapper.toEntity(requestStudentDto)).thenReturn(student);
         when(studentRepository.save(student)).thenReturn(student);
-        when(studentMapper.toResponseDto(student)).thenReturn(responseStudentDto);
+        when(studentMapper.toResponseDto(student)).thenReturn(responseStudentWithClassDto);
 
-        ResponseStudentDto result = studentService.createStudent(requestStudentDto);
+        ResponseStudentWithClassDto result = studentService.createStudent(requestStudentDto);
 
-        assertEquals(responseStudentDto, result);
+        assertEquals(responseStudentWithClassDto, result);
         verify(studentMapper).toEntity(requestStudentDto);
         verify(studentRepository).save(student);
     }

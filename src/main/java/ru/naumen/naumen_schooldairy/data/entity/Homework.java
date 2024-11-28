@@ -29,13 +29,6 @@ public class Homework {
     private Lesson lesson;
 
     /**
-     * Предмет
-     */
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "subject_id")
-    private Subject subject;
-
-    /**
      * Описание домашнего задания
      */
     @Column(name = "description", length = Integer.MAX_VALUE)
