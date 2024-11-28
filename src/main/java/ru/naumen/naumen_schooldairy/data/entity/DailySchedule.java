@@ -1,8 +1,7 @@
 package ru.naumen.naumen_schooldairy.data.entity;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import java.time.LocalDate;
 import java.util.LinkedHashSet;
@@ -14,7 +13,10 @@ import java.util.Set;
 @Getter
 @Setter
 @Entity
+@Builder
+@NoArgsConstructor
 @Table(name = "daily_schedule")
+@AllArgsConstructor
 public class DailySchedule {
     /**
      * Идентификатор расписания
@@ -46,7 +48,7 @@ public class DailySchedule {
     /**
      * Перечень уроков
      */
-    @OneToMany(mappedBy = "dailySchedule")
+    @OneToMany(mappedBy = "dailySchedule", cascade = CascadeType.ALL)
     private Set<Lesson> lessons = new LinkedHashSet<>();
 
 }

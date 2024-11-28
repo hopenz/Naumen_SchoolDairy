@@ -9,4 +9,8 @@
         <sqlFile path="scripts/init_tables.sql" relativeToChangelogFile="true"/>
     </changeSet>
 
+    <changeSet id="test_data" author="larchik">
+        <sqlFile path="scripts/filling_test_data_in_the_database.sql" relativeToChangelogFile="true"/>
+    </changeSet>
+
 </databaseChangeLog>

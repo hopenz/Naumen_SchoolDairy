@@ -1,16 +1,18 @@
-package ru.naumen.naumen_schooldairy.data.mapper.schoolClassMapper;
+package ru.naumen.naumen_schooldairy.data.mapper.schoolClass;
 
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import ru.naumen.naumen_schooldairy.data.dto.schoolClass.ResponseClassWithDailyScheduleWithLessonDto;
 import ru.naumen.naumen_schooldairy.data.dto.schoolClass.ResponseSchoolClassDto;
 import ru.naumen.naumen_schooldairy.data.dto.schoolClass.ResponseSchoolClassWithScheduleDto;
 import ru.naumen.naumen_schooldairy.data.entity.SchoolClass;
 import ru.naumen.naumen_schooldairy.data.mapper.dailySchedule.DailyScheduleMapper;
+import ru.naumen.naumen_schooldairy.data.mapper.student.StudentMapper;
 
 /**
  * Преобразует сущность SchoolClass в DTO.
  */
-@Mapper(componentModel = "spring", uses = {DailyScheduleMapper.class})
+@Mapper(componentModel = "spring", uses = {DailyScheduleMapper.class, StudentMapper.class})
 public interface SchoolClassMapper {
 
     /**
@@ -29,4 +31,7 @@ public interface SchoolClassMapper {
      */
     @Mapping(target = "responseDailySchedulesDto", source = "dailySchedules")
     ResponseSchoolClassWithScheduleDto toResponseWithScheduleDto(SchoolClass schoolClass);
+
+    @Mapping(target = "dailySchedules", source = "dailySchedules")
+    ResponseClassWithDailyScheduleWithLessonDto toDto(SchoolClass schoolClass);
 }

@@ -3,10 +3,7 @@ package ru.naumen.naumen_schooldairy.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.naumen.naumen_schooldairy.data.dto.student.RequestStudentDto;
-import ru.naumen.naumen_schooldairy.data.dto.student.ResponseStudentDto;
-import ru.naumen.naumen_schooldairy.data.dto.student.ResponseStudentWithScheduleDto;
-import ru.naumen.naumen_schooldairy.data.dto.student.ResponseStudentWithSubjectsAndMarksDto;
+import ru.naumen.naumen_schooldairy.data.dto.student.*;
 import ru.naumen.naumen_schooldairy.data.entity.Student;
 import ru.naumen.naumen_schooldairy.data.mapper.student.StudentMapper;
 import ru.naumen.naumen_schooldairy.data.repository.StudentRepository;
@@ -14,6 +11,7 @@ import ru.naumen.naumen_schooldairy.exception.EntityNotFoundException;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Сервис для работы с сущностью Student.
@@ -38,7 +36,7 @@ public class StudentService {
      * @return список DTO ResponseStudentDto, представляющих всех студентов.
      */
     @Transactional
-    public List<ResponseStudentDto> getAllStudents() {
+    public List<ResponseStudentWithClassDto> getAllStudents() {
         return studentRepository.findAll().stream()
                 .map(studentMapper::toResponseDto)
                 .toList();
@@ -53,7 +51,7 @@ public class StudentService {
      * @throws EntityNotFoundException если студент с указанным идентификатором не найден.
      */
     @Transactional
-    public ResponseStudentDto updateStudent(Long id, RequestStudentDto requestStudentDto) {
+    public ResponseStudentWithClassDto updateStudent(Long id, RequestStudentDto requestStudentDto) {
         Student studentDb = studentRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Student", id));
 
@@ -67,7 +65,6 @@ public class StudentService {
         newStudent.setPhoneNumber(requestStudentDto.phoneNumber());
 
         return studentMapper.toResponseDto(studentRepository.save(newStudent));
-
     }
 
     /**
@@ -78,7 +75,7 @@ public class StudentService {
      * @throws EntityNotFoundException если студент с указанным идентификатором не найден.
      */
     @Transactional
-    public ResponseStudentDto getStudentById(Long id) {
+    public ResponseStudentWithClassDto getStudentById(Long id) {
         Student student = studentRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Student", id));
 
@@ -92,7 +89,7 @@ public class StudentService {
      * @return объект ResponseStudentDto, представляющий созданного студента.
      */
     @Transactional
-    public ResponseStudentDto createStudent(RequestStudentDto requestStudentDto) {
+    public ResponseStudentWithClassDto createStudent(RequestStudentDto requestStudentDto) {
         Student student = studentMapper.toEntity(requestStudentDto);
         Student studentDb = studentRepository.save(student);
         return studentMapper.toResponseDto(studentDb);
@@ -124,4 +121,16 @@ public class StudentService {
         return studentMapper.toResponseWithSubjectsAndMarks(studentDb);
     }
 
+    @Transactional
+    public List<ResponseStudentWithMarksDto> getStudentsMarks(Long classId, Long subjectId) {
+        List<Student> students = studentRepository.findAllBySchoolClass_Id(classId);
+        for (Student student : students) {
+            student.setMarks(
+                    student.getMarks().stream()
+                            .filter(mark -> mark.getSubject().getId().equals(subjectId))
+                            .collect(Collectors.toSet())
+            );
+        }
+        return students.stream().map(studentMapper::toResponseWithMarks).toList();
+    }
 }

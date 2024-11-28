@@ -2,13 +2,10 @@ package ru.naumen.naumen_schooldairy.data.mapper.student;
 
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
-import ru.naumen.naumen_schooldairy.data.dto.student.RequestStudentDto;
-import ru.naumen.naumen_schooldairy.data.dto.student.ResponseStudentDto;
-import ru.naumen.naumen_schooldairy.data.dto.student.ResponseStudentWithScheduleDto;
-import ru.naumen.naumen_schooldairy.data.dto.student.ResponseStudentWithSubjectsAndMarksDto;
+import ru.naumen.naumen_schooldairy.data.dto.student.*;
 import ru.naumen.naumen_schooldairy.data.entity.Student;
 import ru.naumen.naumen_schooldairy.data.mapper.mark.MarkMapper;
-import ru.naumen.naumen_schooldairy.data.mapper.schoolClassMapper.SchoolClassMapper;
+import ru.naumen.naumen_schooldairy.data.mapper.schoolClass.SchoolClassMapper;
 
 /**
  * Mapper для преобразования сущности Student в различные DTO и обратно
@@ -31,7 +28,7 @@ public interface StudentMapper {
      * @return объект ResponseStudentDto, представляющий информацию о студенте.
      */
     @Mapping(target = "responseSchoolClassDto", source = "schoolClass")
-    ResponseStudentDto toResponseDto(Student student);
+    ResponseStudentWithClassDto toResponseDto(Student student);
 
     /**
      * Преобразует сущность Student в DTO ResponseStudentWithScheduleDto с расписанием.
@@ -48,6 +45,12 @@ public interface StudentMapper {
      * @param student сущность Student, которую необходимо преобразовать.
      * @return объект ResponseStudentWithSubjectsAndMarksDto, представляющий информацию о студенте с предметами и оценками.
      */
-    @Mapping(target = "responseMarkDto", source = "marks")
+    @Mapping(target = "responseMarkWithSubjectDto", source = "marks")
     ResponseStudentWithSubjectsAndMarksDto toResponseWithSubjectsAndMarks(Student student);
+
+    @Mapping(target = "marks", source = "marks")
+    ResponseStudentWithMarksDto toResponseWithMarks(Student student);
+
+    ResponseStudentDto toDto(Student student);
+
 }

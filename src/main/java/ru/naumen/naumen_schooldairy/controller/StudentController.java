@@ -1,15 +1,13 @@
 package ru.naumen.naumen_schooldairy.controller;
 
+import io.swagger.v3.oas.annotations.Parameter;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import ru.naumen.naumen_schooldairy.data.dto.student.RequestStudentDto;
-import ru.naumen.naumen_schooldairy.data.dto.student.ResponseStudentDto;
-import ru.naumen.naumen_schooldairy.data.dto.student.ResponseStudentWithScheduleDto;
-import ru.naumen.naumen_schooldairy.data.dto.student.ResponseStudentWithSubjectsAndMarksDto;
+import ru.naumen.naumen_schooldairy.data.dto.student.*;
 import ru.naumen.naumen_schooldairy.service.StudentService;
 
 import java.time.LocalDate;
@@ -19,7 +17,7 @@ import java.util.List;
  * Контроллер для управления операциями, связанными со школьниками.
  */
 @RestController
-@RequestMapping("/api/student")
+@RequestMapping("/api/students")
 @RequiredArgsConstructor
 @Validated
 public class StudentController {
@@ -35,8 +33,8 @@ public class StudentController {
      * @return ResponseEntity, содержащий список объектов ResponseStudentDto, представляющих школьников
      */
     @GetMapping
-    public ResponseEntity<List<ResponseStudentDto>> getAllStudents() {
-        List<ResponseStudentDto> students = studentService.getAllStudents();
+    public ResponseEntity<List<ResponseStudentWithClassDto>> getAllStudents() {
+        List<ResponseStudentWithClassDto> students = studentService.getAllStudents();
         return ResponseEntity.ok(students);
     }
 
@@ -47,10 +45,10 @@ public class StudentController {
      * @return ResponseEntity, содержащий объект ResponseStudentDto, представляющий школьника
      */
     @GetMapping("/{id}")
-    public ResponseEntity<ResponseStudentDto> getStudentById(
+    public ResponseEntity<ResponseStudentWithClassDto> getStudentById(
             @NotNull @Positive @PathVariable("id") Long id) {
-        ResponseStudentDto responseStudentDto = studentService.getStudentById(id);
-        return ResponseEntity.ok(responseStudentDto);
+        ResponseStudentWithClassDto responseStudentWithClassDto = studentService.getStudentById(id);
+        return ResponseEntity.ok(responseStudentWithClassDto);
     }
 
     /**
@@ -61,10 +59,10 @@ public class StudentController {
      * @return ResponseEntity, содержащий объект ResponseStudentDto, представляющий обновленного школьника
      */
     @PutMapping("/{id}")
-    public ResponseEntity<ResponseStudentDto> updateStudent(
+    public ResponseEntity<ResponseStudentWithClassDto> updateStudent(
             @NotNull @Positive @PathVariable("id") Long id,
             @RequestBody @Validated RequestStudentDto requestStudentDto) {
-        ResponseStudentDto updateStudent = studentService.updateStudent(id, requestStudentDto);
+        ResponseStudentWithClassDto updateStudent = studentService.updateStudent(id, requestStudentDto);
         return ResponseEntity.ok(updateStudent);
     }
 
@@ -75,9 +73,9 @@ public class StudentController {
      * @return ResponseEntity, содержащий объект ResponseStudentDto, представляющий созданного школьника
      */
     @PostMapping
-    public ResponseEntity<ResponseStudentDto> createStudent(
+    public ResponseEntity<ResponseStudentWithClassDto> createStudent(
             @RequestBody @Validated RequestStudentDto requestStudentDto) {
-        ResponseStudentDto createdStudent = studentService.createStudent(requestStudentDto);
+        ResponseStudentWithClassDto createdStudent = studentService.createStudent(requestStudentDto);
         return ResponseEntity.ok(createdStudent);
     }
 
@@ -88,7 +86,7 @@ public class StudentController {
      * @param date дата
      * @return ResponseEntity, содержащий объект ResponseStudentWithScheduleDto
      */
-    @GetMapping("/lesson")
+    @GetMapping("/lessons")
     public ResponseEntity<ResponseStudentWithScheduleDto> getStudentByIdAndDate(
             @NotNull @Positive @RequestParam("id") Long id,
             @NotNull @RequestParam("date") LocalDate date) {
@@ -102,11 +100,17 @@ public class StudentController {
      * @param id идентификатор школьника
      * @return ResponseEntity, содержащий объект ResponseStudentWithSubjectsAndMarksDto
      */
-    @GetMapping("/subjectsAndMarks")
+    @GetMapping("/marks/{id}")
     public ResponseEntity<ResponseStudentWithSubjectsAndMarksDto> getSubjectsAndMarks(
-            @NotNull @Positive @RequestParam("id") Long id) {
+            @NotNull @Positive @PathVariable("id") Long id) {
         ResponseStudentWithSubjectsAndMarksDto studentSubjectMark = studentService.getSubjectsAndMarks(id);
         return ResponseEntity.ok(studentSubjectMark);
     }
 
+    @GetMapping("/marks")
+    public ResponseEntity<List<ResponseStudentWithMarksDto>> getStudentsMarks
+            (@Parameter(name = "classId") @NotNull @Positive @RequestParam("classId") Long classId,
+             @Parameter(name = "subjectId") @NotNull @Positive @RequestParam("subjectId") Long subjectId) {
+        return ResponseEntity.ok(studentService.getStudentsMarks(classId, subjectId));
+    }
 }

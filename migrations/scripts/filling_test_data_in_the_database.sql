@@ -40,10 +40,10 @@ VALUES (1, 1, 1),
        (4, 3, 1);
 
 -- Вставка тестовых данных в таблицу homework
-INSERT INTO homework (lesson_id, subject_id, description)
-VALUES (1, 1, 'Упражнение 5 на странице 23'),
-       (2, 2, 'Написать сочинение на тему "Моя семья"'),
-       (3, 3, 'Подготовить презентацию по теме "Древний Рим"');
+INSERT INTO homework (lesson_id,description)
+VALUES (1, 'Упражнение 5 на странице 23'),
+       (2, 'Написать сочинение на тему "Моя семья"'),
+       (3, 'Подготовить презентацию по теме "Древний Рим"');
 
 -- Вставка тестовых данных в таблицу mark
 INSERT INTO mark (student_id, subject_id, lesson_id, mark, grade_date)

@@ -27,7 +27,7 @@ public class Lesson {
     /**
      * Предмет
      */
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
     @JoinColumn(name = "subject_id")
     private Subject subject;
 
@@ -47,13 +47,13 @@ public class Lesson {
     /**
      * Перечень домашних заданий
      */
-    @OneToMany(mappedBy = "lesson")
+    @OneToMany(mappedBy = "lesson", cascade = CascadeType.ALL)
     private Set<Homework> homework = new LinkedHashSet<>();
 
     /**
      * Перечень полученных оценок
      */
-    @OneToMany(mappedBy = "lesson")
+    @OneToMany(mappedBy = "lesson", cascade = CascadeType.ALL)
     private Set<Mark> marks = new LinkedHashSet<>();
 
 }
