@@ -15,5 +15,16 @@ spring:
     show-sql: true
     open-in-view: false
 
+  mail:
+    host: smtp.yandex.ru
+    port: 587
+    username: hope17211@yandex.ru
+    password: ${EMAILPASS}
+    properties:
+      mail.smtp.auth: true
+      mail.smtp.starttls.enable: true
+      mail.smtp.starttls.required: true
+    default-encoding: UTF-8
+
 server:
   port: 8080

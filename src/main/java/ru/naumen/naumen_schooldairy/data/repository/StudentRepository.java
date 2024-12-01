@@ -29,4 +29,5 @@ public interface StudentRepository extends JpaRepository<Student, Long> {
 
     List<Student> findAllBySchoolClass_Id(Long classId);
 
+
 }

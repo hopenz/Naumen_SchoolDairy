@@ -6,10 +6,16 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.naumen.naumen_schooldairy.data.dto.teacher.RequestTeacherDto;
 import ru.naumen.naumen_schooldairy.data.dto.teacher.ResponseTeacherDto;
 import ru.naumen.naumen_schooldairy.data.dto.teacher.ResponseTeacherWithStudentsDto;
+import ru.naumen.naumen_schooldairy.data.entity.Student;
 import ru.naumen.naumen_schooldairy.data.entity.Teacher;
 import ru.naumen.naumen_schooldairy.data.mapper.teacher.TeacherMapper;
+import ru.naumen.naumen_schooldairy.data.repository.StudentRepository;
 import ru.naumen.naumen_schooldairy.data.repository.TeacherRepository;
 import ru.naumen.naumen_schooldairy.exception.EntityNotFoundException;
+import ru.naumen.naumen_schooldairy.exception.ResourceNotFoundException;
+import ru.naumen.naumen_schooldairy.security.entity.Role;
+import ru.naumen.naumen_schooldairy.security.entity.User;
+import ru.naumen.naumen_schooldairy.security.repository.UserRepository;
 
 /**
  * TODO
@@ -27,6 +33,10 @@ public class TeacherService {
      * TODO
      */
     private final TeacherMapper teacherMapper;
+
+    private final StudentRepository studentRepository;
+
+    private final UserRepository userRepository;
 
 
     /**
@@ -77,5 +87,23 @@ public class TeacherService {
                 .orElseThrow(() -> new EntityNotFoundException("Teacher", id));
 
         return teacherMapper.toDto(teacherDb);
+    }
+
+    @Transactional
+    public void addStudentToTeacher(Long id, String email) {
+        Teacher teacherDb = teacherRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Teacher", id));
+
+        User user = userRepository.findByEmail(email).orElseThrow(
+                () -> new ResourceNotFoundException("User with email" + email + "not found"));
+        if (!user.getRole().equals(Role.ROLE_STUDENT) || user.getStudent().getSchoolClass() != null) {
+            throw new IllegalArgumentException("User with email " + email + " is not a student or already has a class");
+        }
+
+        Student student = user.getStudent();
+        student.setSchoolClass(teacherDb.getSchoolClasses().stream().findFirst().orElseThrow(
+                () -> new ResourceNotFoundException("School class not found")));
+
+        studentRepository.save(student);
     }
 }

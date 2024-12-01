@@ -3,6 +3,7 @@ package ru.naumen.naumen_schooldairy.data.entity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import ru.naumen.naumen_schooldairy.security.entity.User;
 
 import java.util.LinkedHashSet;
 import java.util.Set;
@@ -20,7 +21,6 @@ public class Teacher {
      * Идентификатор учителя
      */
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "teacher_id", nullable = false)
     private Long id;
 
@@ -51,7 +51,12 @@ public class Teacher {
     /**
      * Перечень классов (1 класс - 1 учитель)
      */
-    @OneToMany(mappedBy = "teacher")
+    @OneToMany(mappedBy = "teacher", cascade = CascadeType.ALL)
     private Set<SchoolClass> schoolClasses = new LinkedHashSet<>();
+
+    @MapsId
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "teacher_id")
+    private User user;
 
 }
