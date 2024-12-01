@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import ru.naumen.naumen_schooldairy.security.entity.User;
 
 import java.time.LocalDate;
 import java.util.LinkedHashSet;
@@ -25,7 +26,6 @@ public class Student {
      * Идентификатор школьника
      */
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "student_id", nullable = false)
     private Long id;
 
@@ -77,5 +77,10 @@ public class Student {
      */
     @OneToMany(mappedBy = "student")
     private Set<Mark> marks = new LinkedHashSet<>();
+
+    @MapsId
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "student_id")
+    private User user;
 
 }
