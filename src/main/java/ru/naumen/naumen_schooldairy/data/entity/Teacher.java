@@ -54,6 +54,9 @@ public class Teacher {
     @OneToMany(mappedBy = "teacher", cascade = CascadeType.ALL)
     private Set<SchoolClass> schoolClasses = new LinkedHashSet<>();
 
+    /**
+     * Учетная запись учителя
+     */
     @MapsId
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "teacher_id")

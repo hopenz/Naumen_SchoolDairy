@@ -6,7 +6,13 @@ import java.io.Serializable;
 import java.util.Set;
 
 /**
- * DTO for {@link ru.naumen.naumen_schooldairy.data.entity.SchoolClass}
+ * Класс для ответа с информацией о классе и его ежедневном расписании с уроками.
+ * Этот класс содержит идентификатор класса, название класса и набор ежедневных расписаний,
+ * включая информацию об уроках.
+ *
+ * @param id             идентификатор класса
+ * @param className      название класса
+ * @param dailySchedules набор ежедневных расписаний с уроками, связанными с данным классом
  */
 public record ResponseClassWithDailyScheduleWithLessonDto(Long id, String className,
                                                           Set<ResponseDailyScheduleWithLessonDto> dailySchedules)

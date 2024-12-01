@@ -12,14 +12,30 @@ import ru.naumen.naumen_schooldairy.exception.EntityNotFoundException;
 import java.util.HashSet;
 import java.util.Set;
 
+/**
+ * Сервис для управления домашними заданиями
+ */
 @Service
 @RequiredArgsConstructor
 public class HomeworkService {
 
+    /**
+     * Репозиторий для работы с домашними заданиями
+     */
     private final HomeworkRepository homeworkRepository;
 
+    /**
+     * Репозиторий для работы с уроками
+     */
     private final LessonRepository lessonRepository;
 
+    /**
+     * Обновляет домашнее задание для указанного урока.
+     * Удаляет все существующие домашние задания и создает новое с заданным описанием.
+     *
+     * @param description описание домашнего задания.
+     * @param lessonId    идентификатор урока, к которому будет привязано домашнее задание.
+     */
     @Transactional
     public void updateHomework(String description, Long lessonId) {
         Lesson lesson = lessonRepository.findById(lessonId).orElseThrow(() -> new EntityNotFoundException("Lesson", lessonId));

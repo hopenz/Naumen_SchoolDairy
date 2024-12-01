@@ -18,6 +18,9 @@ import ru.naumen.naumen_schooldairy.security.dto.responses.GeneralAPIResponse;
 import ru.naumen.naumen_schooldairy.security.dto.responses.UserProfile;
 import ru.naumen.naumen_schooldairy.security.service.AuthenticationService;
 
+/**
+ * Контроллер для обработки запросов, связанных с профилем пользователя
+ */
 @RestController
 @Slf4j
 @RequiredArgsConstructor
@@ -26,7 +29,14 @@ public class ProfileController {
     private final AuthenticationService authenticationService;
 
 
-    @Operation(summary = "My Profile", description = "Retrieve user profile information.")
+    /**
+     * Получение информации о профиле пользователя.
+     * Этот API позволяет пользователю получить информацию о своем профиле.
+     *
+     * @param forgotPasswordRequest объект запроса с данными для получения профиля (например, email)
+     * @return ResponseEntity с информацией о профиле пользователя или ошибкой, если пользователь не найден
+     */
+    @Operation(summary = "Мой профиль", description = "Получение информации о профиле пользователя.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "OK: User profile retrieved successfully",
                     content = @Content(mediaType = "application/json",
@@ -37,9 +47,8 @@ public class ProfileController {
 
     })
     @PostMapping("/myProfile")
-    public ResponseEntity<?> myProfile(@Valid @RequestBody ForgotPasswordRequest forgotPasswordRequest){
+    public ResponseEntity<?> myProfile(@Valid @RequestBody ForgotPasswordRequest forgotPasswordRequest) {
         log.info("My profile request received for email {}", forgotPasswordRequest.getEmail());
         return authenticationService.myProfile(forgotPasswordRequest);
     }
-
 }

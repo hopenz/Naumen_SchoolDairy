@@ -78,6 +78,9 @@ public class Student {
     @OneToMany(mappedBy = "student")
     private Set<Mark> marks = new LinkedHashSet<>();
 
+    /**
+     * Учетная карта школьника
+     */
     @MapsId
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "student_id")

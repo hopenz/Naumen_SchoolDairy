@@ -48,9 +48,21 @@ public interface StudentMapper {
     @Mapping(target = "responseMarkWithSubjectDto", source = "marks")
     ResponseStudentWithSubjectsAndMarksDto toResponseWithSubjectsAndMarks(Student student);
 
+    /**
+     * Преобразует сущность Student в DTO ResponseStudentWithMarksDto с оценками.
+     *
+     * @param student сущность Student, которую необходимо преобразовать.
+     * @return объект ResponseStudentWithMarksDto, представляющий информацию о студенте с оценками.
+     */
     @Mapping(target = "marks", source = "marks")
     ResponseStudentWithMarksDto toResponseWithMarks(Student student);
 
+    /**
+     * Преобразует сущность Student в DTO ResponseStudentDto.
+     *
+     * @param student сущность Student, которую необходимо преобразовать.
+     * @return объект ResponseStudentDto, представляющий информацию о студенте.
+     */
     ResponseStudentDto toDto(Student student);
 
 }

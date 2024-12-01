@@ -23,9 +23,23 @@ public interface DailyScheduleMapper {
     @Mapping(target = "responseLessonDto", source = "lessons")
     ResponseDailyScheduleDto toResponseDto(DailySchedule dailySchedule);
 
+    /**
+     * Преобразует сущность DailySchedule в DTO ResponseDailyScheduleWithLessonDto,
+     * включая информацию о уроках.
+     *
+     * @param dailySchedule сущность DailySchedule, которую необходимо преобразовать.
+     * @return объект ResponseDailyScheduleWithLessonDto с информацией о расписании и уроках.
+     */
     @Mapping(target = "lessons", source = "lessons")
     ResponseDailyScheduleWithLessonDto toResponseWithLessonsDto(DailySchedule dailySchedule);
 
+    /**
+     * Преобразует сущность DailySchedule в DTO ResponseDatesOfLessonsDto,
+     * содержащий даты уроков.
+     *
+     * @param dailySchedule сущность DailySchedule, которую необходимо преобразовать.
+     * @return объект ResponseDatesOfLessonsDto с датами уроков.
+     */
     ResponseDatesOfLessonsDto toResponseDatesOfLessonsDto(DailySchedule dailySchedule);
 
 }

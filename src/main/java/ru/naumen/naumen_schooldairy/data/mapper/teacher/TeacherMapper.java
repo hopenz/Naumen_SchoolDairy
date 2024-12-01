@@ -11,41 +11,43 @@ import ru.naumen.naumen_schooldairy.data.mapper.dailySchedule.DailyScheduleMappe
 import ru.naumen.naumen_schooldairy.data.mapper.schoolClass.SchoolClassMapper;
 
 /**
- * TODO
+ * Mapper для преобразования сущностей Teacher в соответствующие DTO
  */
 @Mapper(componentModel = "spring", uses = {SchoolClassMapper.class, DailyScheduleMapper.class})
 public interface TeacherMapper {
 
     /**
-     * TODO
+     * Преобразует сущность Teacher в DTO ResponseTeacherDto.
      *
-     * @param teacher
-     * @return
+     * @param teacher сущность Teacher, которую необходимо преобразовать.
+     * @return объект ResponseTeacherDto, представляющий информацию об учителе.
      */
     ResponseTeacherDto toResponseDto(Teacher teacher);
 
     /**
-     * TODO
+     * Преобразует DTO RequestTeacherDto в сущность Teacher.
      *
-     * @param requestTeacherDto
-     * @return
+     * @param requestTeacherDto DTO, содержащий данные об учителе, которые необходимо преобразовать в сущность.
+     * @return сущность Teacher, представляющая учителя.
      */
     Teacher toEntity(RequestTeacherDto requestTeacherDto);
 
     /**
-     * TODO
+     * Преобразует сущность Teacher в DTO ResponseTeacherWithStudentsDto,
+     * включая информацию о классах и учениках.
      *
-     * @param teacher
-     * @return
+     * @param teacher сущность Teacher, которую необходимо преобразовать.
+     * @return объект ResponseTeacherWithStudentsDto, представляющий информацию об учителе с учениками.
      */
     @Mapping(target = "schoolClasses", source = "schoolClasses")
     ResponseTeacherWithStudentsDto toDto(Teacher teacher);
 
     /**
-     * TODO
+     * Преобразует сущность Teacher в DTO ResponseTeacherWithDateOfLessonsDto,
+     * включая информацию о классах и расписании уроков.
      *
-     * @param teacher
-     * @return
+     * @param teacher сущность Teacher, которую необходимо преобразовать.
+     * @return объект ResponseTeacherWithDateOfLessonsDto, представляющий информацию об учителе с расписанием уроков.
      */
     @Mapping(target = "schoolClasses", source = "schoolClasses")
     ResponseTeacherWithDateOfLessonsDto toDtoWIthDateOfLessons(Teacher teacher);

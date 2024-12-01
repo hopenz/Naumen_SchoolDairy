@@ -21,18 +21,40 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+/**
+ * Сервис для управления расписанием занятий
+ */
 @Service
 @RequiredArgsConstructor
 public class DailyScheduleService {
 
+    /**
+     * Mapper для преобразования данных расписания
+     */
     private final DailyScheduleMapper dailyScheduleMapper;
 
+    /**
+     * Репозиторий для работы с расписанием
+     */
     private final DailyScheduleRepository dailyScheduleRepository;
 
+    /**
+     * Репозиторий для работы с классами
+     */
     private final SchoolClassRepository classRepository;
 
+    /**
+     * Репозиторий для работы с предметами
+     */
     private final SubjectRepository subjectRepository;
 
+    /**
+     * Получает даты уроков для указанного класса и предмета.
+     *
+     * @param classId   идентификатор класса, для которого нужно получить даты уроков.
+     * @param subjectId идентификатор предмета, для которого нужно получить даты уроков.
+     * @return список DTO с датами уроков.
+     */
     @Transactional
     public List<ResponseDatesOfLessonsDto> getDatesOfLessons(Long classId, Long subjectId) {
         Specification<DailySchedule> dailyScheduleSpecification = Specification
@@ -43,6 +65,12 @@ public class DailyScheduleService {
         return dailySchedules.stream().map(dailyScheduleMapper::toResponseDatesOfLessonsDto).toList();
     }
 
+    /**
+     * Создает новое расписание на основе предоставленных данных.
+     *
+     * @param schedule данные о расписании, которые нужно создать.
+     * @param classId  идентификатор класса, к которому будет привязано расписание.
+     */
     @Transactional
     public void createSchedule(RequestDailyScheduleDto schedule, @NotNull @Positive Long classId) {
         DailySchedule newSchedule = new DailySchedule();

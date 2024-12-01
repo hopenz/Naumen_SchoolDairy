@@ -5,7 +5,6 @@ import jakarta.mail.internet.MimeMessage;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.io.ClassPathResource;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.retry.annotation.Backoff;
@@ -17,15 +16,34 @@ import org.springframework.stereotype.Service;
 import java.io.UnsupportedEncodingException;
 import java.util.concurrent.CompletableFuture;
 
+/**
+ * Сервис для отправки электронных писем
+ */
 @Service
 @RequiredArgsConstructor
 @Slf4j
 public class EmailService {
+
+    /**
+     * Объект для отправки электронных писем
+     */
     private final JavaMailSender javaMailSender;
 
+    /**
+     * Адрес электронной почты отправителя
+     */
     @Value("${spring.mail.username}")
     private String emailAddress;
 
+    /**
+     * Отправляет электронное письмо с OTP, повторяя попытки в случае ошибок.
+     *
+     * @param to  адрес электронной почты получателя.
+     * @param otp одноразовый пароль для отправки.
+     * @return CompletableFuture с результатом операции отправки.
+     * @throws MessagingException           если возникает ошибка при отправке сообщения.
+     * @throws UnsupportedEncodingException если кодировка не поддерживается.
+     */
     @Async
     @Retryable(
             retryFor = MessagingException.class,
@@ -38,17 +56,30 @@ public class EmailService {
             return CompletableFuture.completedFuture(1);
         } catch (MessagingException e) {
             return CompletableFuture.completedFuture(handleMessagingException(e));
-        }catch(UnsupportedEncodingException e) {
+        } catch (UnsupportedEncodingException e) {
             return CompletableFuture.completedFuture(handleUnsupportedEncodingException(e));
         }
     }
 
+    /**
+     * Обрабатывает исключение MessagingException, возникающее при отправке электронного письма.
+     *
+     * @param e исключение, которое нужно обработать.
+     * @return -1 в случае ошибки.
+     */
     @Recover
     public int handleMessagingException(MessagingException e) {
         log.error("Maximum attempt reached, failed to send email");
         log.error("Error message: {}", e.getMessage());
         return -1;
     }
+
+    /**
+     * Обрабатывает исключение UnsupportedEncodingException, возникающее при отправке электронного письма.
+     *
+     * @param e исключение, которое нужно обработать.
+     * @return -1 в случае ошибки.
+     */
     @Recover
     public int handleUnsupportedEncodingException(UnsupportedEncodingException e) {
         log.error("Maximum attempt reached , failed to send email");
@@ -56,6 +87,14 @@ public class EmailService {
         return -1;
     }
 
+    /**
+     * Отправляет одноразовый пароль (OTP) по электронной почте.
+     *
+     * @param to  адрес электронной почты получателя.
+     * @param otp одноразовый пароль для отправки.
+     * @throws MessagingException           если возникает ошибка при создании или отправке сообщения.
+     * @throws UnsupportedEncodingException если кодировка не поддерживается.
+     */
     public void sendOtpByEmail(String to, String otp) throws MessagingException, UnsupportedEncodingException {
         log.info("Trying to send email to {}", to);
 

@@ -16,27 +16,39 @@ import ru.naumen.naumen_schooldairy.security.dto.responses.RefreshTokenResponse;
 import ru.naumen.naumen_schooldairy.security.dto.responses.RegisterResponse;
 import ru.naumen.naumen_schooldairy.security.dto.responses.RegisterVerifyResponse;
 
+/**
+ * Интерфейс для определения API аутентификации
+ */
 @Tag(name = "Authentication", description = "Authentication APIs")
 public interface AuthenticationInterface {
 
-    @Operation(summary = "Register a new user", description = "This API registers a new user if the user is not already present in the records, and sends an email to the user for verification.")
+    /**
+     * Регистрация нового пользователя.
+     * Этот API регистрирует нового пользователя, если пользователь еще не существует в записях,
+     * и отправляет электронное письмо пользователю для верификации.
+     *
+     * @param registerRequest объект запроса с данными для регистрации
+     * @return ResponseEntity с результатом регистрации
+     */
+    @Operation(summary = "Регистрация нового пользователя",
+            description = "Этот API регистрирует нового пользователя, если он еще не указан в записях, и отправляет ему электронное письмо для подтверждения.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "User has been saved in records, but still needs to be verified",
                     content = @Content(mediaType = "application/json",
                             schema = @Schema(implementation = RegisterResponse.class))),
             @ApiResponse(responseCode = "400", description = """
-                Bad Request:
-                - User already exists with this email and is verified.
-                - Validation errors:
-                  - First name can't be blank
-                  - Last name can't be blank
-                  - Invalid email entered
-                  - Password must contain at least 8 characters, one uppercase, one lowercase and one number
-                  - Please choose your gender
-                  - Invalid phone number, please enter in the format +(code)XXXXXXXXXX
-                  - Please choose a role
-                - User already exists with this phone number. Please try again with a different phone number.
-            """,
+                        Bad Request:
+                        - User already exists with this email and is verified.
+                        - Validation errors:
+                          - First name can't be blank
+                          - Last name can't be blank
+                          - Invalid email entered
+                          - Password must contain at least 8 characters, one uppercase, one lowercase and one number
+                          - Please choose your gender
+                          - Invalid phone number, please enter in the format +(code)XXXXXXXXXX
+                          - Please choose a role
+                        - User already exists with this phone number. Please try again with a different phone number.
+                    """,
                     content = @Content(mediaType = "application/json",
                             schema = @Schema(implementation = Error.class))),
             @ApiResponse(responseCode = "500", description = "Internal Server Error: Failed to send OTP email. Please try again later.",
@@ -45,15 +57,22 @@ public interface AuthenticationInterface {
     })
     ResponseEntity<RegisterResponse> register(@Valid @RequestBody RegisterRequest registerRequest);
 
-    @Operation(summary = "Verify user registration", description = "This API verifies user registration using the provided OTP.")
+    /**
+     * Верификация регистрации пользователя.
+     * Этот API проверяет регистрацию пользователя с использованием предоставленного OTP.
+     *
+     * @param registerVerifyRequest объект запроса с данными для верификации
+     * @return ResponseEntity с результатом верификации
+     */
+    @Operation(summary = "Подтвердите регистрацию пользователя", description = "Этот API проверяет регистрацию пользователя с помощью предоставленного OTP.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "User registration verified successfully",
                     content = @Content(mediaType = "application/json",
                             schema = @Schema(implementation = RegisterVerifyResponse.class))),
             @ApiResponse(responseCode = "400", description = """
-                Bad Request:
-                - Email or OTP is incorrect
-            """,
+                        Bad Request:
+                        - Email or OTP is incorrect
+                    """,
                     content = @Content(mediaType = "application/json",
                             schema = @Schema(implementation = GeneralAPIResponse.class))),
             @ApiResponse(responseCode = "408", description = "Request Timeout: OTP has expired",
@@ -68,7 +87,14 @@ public interface AuthenticationInterface {
     })
     ResponseEntity<?> verifyRegistration(@Valid @RequestBody RegisterVerifyRequest registerVerifyRequest);
 
-    @Operation(summary = "Login user", description = "Authenticate and log in a user.")
+    /**
+     * Вход пользователя в систему.
+     * Аутентифицирует и выполняет вход пользователя.
+     *
+     * @param loginRequest объект запроса с данными для входа
+     * @return ResponseEntity с результатом входа
+     */
+    @Operation(summary = "Авторизация пользователя", description = "Выполнить аутентификацию и вход в систему пользователя.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "User logged in successfully",
                     content = @Content(mediaType = "application/json",
@@ -82,7 +108,14 @@ public interface AuthenticationInterface {
     })
     ResponseEntity<?> login(@Valid @RequestBody LoginRequest loginRequest);
 
-    @Operation(summary = "Forgot password", description = "Send OTP to user's email for resetting password.")
+    /**
+     * Запрос на сброс пароля.
+     * Отправляет OTP на электронную почту пользователя для сброса пароля.
+     *
+     * @param forgotPasswordRequest объект запроса с данными для сброса пароля
+     * @return ResponseEntity с результатом отправки OTP
+     */
+    @Operation(summary = "Забыл пароль", description = "Отправить OTP на электронную почту пользователя для сброса пароля.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "OTP sent successfully",
                     content = @Content(mediaType = "application/json",
@@ -99,7 +132,14 @@ public interface AuthenticationInterface {
     })
     ResponseEntity<?> forgotPassword(@Valid @RequestBody ForgotPasswordRequest forgotPasswordRequest);
 
-    @Operation(summary = "Verify OTP", description = "Verify the OTP provided by the user.")
+    /**
+     * Верификация OTP.
+     * Проверяет введенный OTP пользователя.
+     *
+     * @param registerVerifyRequest объект запроса с данными для верификации OTP
+     * @return ResponseEntity с результатом верификации OTP
+     */
+    @Operation(summary = "Верификация OTP", description = "Проверяет введенный OTP пользователя.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "OTP verified successfully, now you can change the password",
                     content = @Content(mediaType = "application/json",
@@ -116,7 +156,14 @@ public interface AuthenticationInterface {
     })
     ResponseEntity<?> verifyOtp(@Valid @RequestBody RegisterVerifyRequest registerVerifyRequest);
 
-    @Operation(summary = "Reset Password", description = "Reset the password for the user.")
+    /**
+     * Сброс пароля пользователя.
+     * Этот API позволяет сбросить пароль для пользователя.
+     *
+     * @param resetPasswordRequest объект запроса с данными для сброса пароля
+     * @return ResponseEntity с результатом сброса пароля
+     */
+    @Operation(summary = "Сброс пароля", description = "Сбросить пароль пользователя.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Password has been reset successfully",
                     content = @Content(mediaType = "application/json",
@@ -130,7 +177,14 @@ public interface AuthenticationInterface {
     })
     ResponseEntity<?> resetPassword(@Valid @RequestBody ResetPasswordRequest resetPasswordRequest);
 
-    @Operation(summary = "Refresh Token", description = "Generate a new access token from a refresh token.")
+    /**
+     * Обновление токена доступа.
+     * Этот API генерирует новый токен доступа на основе refresh token.
+     *
+     * @param refreshToken строка refresh token для генерации нового токена доступа
+     * @return ResponseEntity с новым токеном доступа
+     */
+    @Operation(summary = "Обновление токена", description = "Генерирует новый токен доступа на основе refresh token")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "OK: Access token generated successfully",
                     content = @Content(mediaType = "application/json",

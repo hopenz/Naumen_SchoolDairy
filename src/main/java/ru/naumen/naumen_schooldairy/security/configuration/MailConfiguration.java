@@ -10,23 +10,43 @@ import org.springframework.scheduling.annotation.EnableAsync;
 
 import java.util.Properties;
 
+/**
+ * Конфигурационный класс для настройки отправки электронной почты
+ */
 @Configuration
 @EnableRetry
 @EnableAsync
 public class MailConfiguration {
 
+    /**
+     * Имя пользователя для аутентификации на SMTP-сервере.
+     */
     @Value("${spring.mail.username}")
     private String username;
 
+    /**
+     * Пароль для аутентификации на SMTP-сервере.
+     */
     @Value("${spring.mail.password}")
     private String password;
 
+    /**
+     * Хост SMTP-сервера для отправки электронной почты.
+     */
     @Value("${spring.mail.host}")
     private String host;
 
+    /**
+     * Порт SMTP-сервера для отправки электронной почты.
+     */
     @Value("${spring.mail.port}")
     private int port;
 
+    /**
+     * Создает бин JavaMailSender, настроенный для отправки электронной почты.
+     *
+     * @return экземпляр JavaMailSender, который можно использовать для отправки писем.
+     */
     @Bean
     public JavaMailSender javaMailSender() {
         JavaMailSenderImpl mailSender = new JavaMailSenderImpl();

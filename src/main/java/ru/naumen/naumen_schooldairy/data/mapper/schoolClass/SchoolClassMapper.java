@@ -32,6 +32,12 @@ public interface SchoolClassMapper {
     @Mapping(target = "responseDailySchedulesDto", source = "dailySchedules")
     ResponseSchoolClassWithScheduleDto toResponseWithScheduleDto(SchoolClass schoolClass);
 
+    /**
+     * Преобразует сущность SchoolClass в DTO ResponseClassWithDailyScheduleWithLessonDto.
+     *
+     * @param schoolClass сущность SchoolClass, которую необходимо преобразовать.
+     * @return объект ResponseClassWithDailyScheduleWithLessonDto с расписанием уроков.
+     */
     @Mapping(target = "dailySchedules", source = "dailySchedules")
     ResponseClassWithDailyScheduleWithLessonDto toDto(SchoolClass schoolClass);
 }

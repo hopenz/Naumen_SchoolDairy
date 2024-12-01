@@ -23,5 +23,11 @@ public interface MarkMapper {
     @Mapping(target = "responseSubjectDto", source = "subject")
     ResponseMarkWithSubjectDto toResponseMarkWithSubjectDto(Mark mark);
 
+    /**
+     * Преобразует сущность Mark в DTO ResponseMarkDto.
+     *
+     * @param mark сущность Mark, которую необходимо преобразовать.
+     * @return объект ResponseMarkDto, представляющий оценку.
+     */
     ResponseMarkDto toDto(Mark mark);
 }
