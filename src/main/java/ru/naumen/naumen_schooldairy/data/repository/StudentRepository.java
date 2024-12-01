@@ -27,6 +27,12 @@ public interface StudentRepository extends JpaRepository<Student, Long> {
     Student findStudentByIdAndDate(@Param("studentId") Long studentId,
                                    @Param("dateDay") LocalDate dateDay);
 
+    /**
+     * Находит всех студентов по идентификатору класса.
+     *
+     * @param classId идентификатор класса, для которого необходимо найти студентов.
+     * @return список студентов, относящихся к указанному классу.
+     */
     List<Student> findAllBySchoolClass_Id(Long classId);
 
 

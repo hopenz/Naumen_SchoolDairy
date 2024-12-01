@@ -9,13 +9,29 @@ import ru.naumen.naumen_schooldairy.security.constants.ApplicationConstants;
 
 import java.util.Random;
 
+/**
+ * Сервис для генерации одноразовых паролей
+ */
 @Service
 @RequiredArgsConstructor
 @Slf4j
 public class OtpService {
+
+    /**
+     * Символы, используемые для генерации OTP
+     */
     String otpChar = ApplicationConstants.OTP_CHARACTERS;
+
+    /**
+     * Длина OTP
+     */
     Integer otpLength = ApplicationConstants.OTP_LENGTH;
 
+    /**
+     * Генерирует одноразовый пароль (OTP).
+     *
+     * @return сгенерированный одноразовый пароль.
+     */
     public String generateOtp() {
         StringBuilder otp = new StringBuilder();
         Random random = new Random();
@@ -26,6 +42,13 @@ public class OtpService {
         return otp.toString();
     }
 
+    /**
+     * Получает одноразовый пароль (OTP) для указанного адреса электронной почты.
+     * Этот метод также кэширует сгенерированный OTP.
+     *
+     * @param email адрес электронной почты, для которого генерируется OTP.
+     * @return сгенерированный одноразовый пароль.
+     */
     @CachePut(value = "user", key = "#email")
     public String getOtpForEmail(String email) {
         return generateOtp();

@@ -1,30 +1,52 @@
 package ru.naumen.naumen_schooldairy.exception;
 
-public class ResourceNotFoundException extends RuntimeException{
-    public ResourceNotFoundException(){
+/**
+ * Исключение, которое выбрасывается, когда запрашиваемый ресурс не найден
+ */
+public class ResourceNotFoundException extends RuntimeException {
+
+    /**
+     * Конструктор по умолчанию для создания нового исключения без сообщения.
+     */
+    public ResourceNotFoundException() {
         super();
     }
 
-    public ResourceNotFoundException(String message){
+    /**
+     * Конструктор для создания нового исключения с заданным сообщением.
+     *
+     * @param message сообщение об ошибке, которое будет передано при выбрасывании исключения
+     */
+    public ResourceNotFoundException(String message) {
         super(message);
     }
 
-    public ResourceNotFoundException(String message, Throwable cause){
+    /**
+     * Конструктор для создания нового исключения с заданным сообщением и причиной.
+     *
+     * @param message сообщение об ошибке, которое будет передано при выбрасывании исключения
+     * @param cause   причина, по которой было выброшено это исключение
+     */
+    public ResourceNotFoundException(String message, Throwable cause) {
         super(message, cause);
     }
 
-    public ResourceNotFoundException(Throwable cause){
+    /**
+     * Конструктор для создания нового исключения с заданной причиной.
+     *
+     * @param cause причина, по которой было выброшено это исключение
+     */
+    public ResourceNotFoundException(Throwable cause) {
         super(cause);
     }
 
-    // Returns the detail message string of this throwable.
     @Override
-    public String toString(){
+    public String toString() {
         String s = getClass().getName();
         String message = getLocalizedMessage();
-        if(message != null){
+        if (message != null) {
             return (s + ": " + message);
-        }else {
+        } else {
             return s;
         }
     }

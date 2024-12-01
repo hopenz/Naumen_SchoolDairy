@@ -7,8 +7,17 @@ import ru.naumen.naumen_schooldairy.data.entity.Lesson;
 import ru.naumen.naumen_schooldairy.data.entity.SchoolClass;
 import ru.naumen.naumen_schooldairy.data.entity.Subject;
 
+/**
+ * Спецификации для фильтрации расписания занятий
+ */
 public class DailyScheduleSpecification {
 
+    /**
+     * Создает спецификацию для фильтрации расписания по идентификатору класса.
+     *
+     * @param classId идентификатор класса, по которому будет выполнена фильтрация.
+     * @return спецификация, которая фильтрует расписание по заданному идентификатору класса.
+     */
     public static Specification<DailySchedule> hasClassId(Long classId) {
         return (root, query, criteriaBuilder) -> {
             if (classId == null) return null;
@@ -17,6 +26,12 @@ public class DailyScheduleSpecification {
         };
     }
 
+    /**
+     * Создает спецификацию для фильтрации расписания по идентификатору предмета.
+     *
+     * @param subjectId идентификатор предмета, по которому будет выполнена фильтрация.
+     * @return спецификация, которая фильтрует расписание по заданному идентификатору предмета.
+     */
     public static Specification<DailySchedule> hasSubjectId(Long subjectId) {
         return (root, query, criteriaBuilder) -> {
             if (subjectId == null) return null;

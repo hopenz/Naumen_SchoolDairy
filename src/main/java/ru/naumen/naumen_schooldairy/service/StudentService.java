@@ -121,6 +121,13 @@ public class StudentService {
         return studentMapper.toResponseWithSubjectsAndMarks(studentDb);
     }
 
+    /**
+     * Получает оценки студентов для указанного класса и предмета.
+     *
+     * @param classId   идентификатор класса, для которого нужно получить оценки студентов.
+     * @param subjectId идентификатор предмета, по которому нужно получить оценки.
+     * @return список DTO с информацией о студентах и их оценках по указанному предмету.
+     */
     @Transactional
     public List<ResponseStudentWithMarksDto> getStudentsMarks(Long classId, Long subjectId) {
         List<Student> students = studentRepository.findAllBySchoolClass_Id(classId);

@@ -27,6 +27,13 @@ public interface LessonMapper {
     @Mapping(target = "responseHomeworkDto", source = "homework")
     ResponseLessonDto toResponseDto(Lesson lesson);
 
+    /**
+     * Преобразует сущность Lesson в DTO ResponseLessonWithSubjectDto,
+     * включая информацию о предмете.
+     *
+     * @param lesson сущность Lesson, которую необходимо преобразовать.
+     * @return объект ResponseLessonWithSubjectDto с информацией о занятии и предмете.
+     */
     @Mapping(target = "subject", source = "subject")
     ResponseLessonWithSubjectDto toDto(Lesson lesson);
 

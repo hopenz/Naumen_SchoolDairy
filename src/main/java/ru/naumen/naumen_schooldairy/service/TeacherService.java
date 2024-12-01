@@ -18,24 +18,30 @@ import ru.naumen.naumen_schooldairy.security.entity.User;
 import ru.naumen.naumen_schooldairy.security.repository.UserRepository;
 
 /**
- * TODO
+ * Сервис для управления данными учителей
  */
 @Service
 @RequiredArgsConstructor
 public class TeacherService {
 
     /**
-     * TODO
+     * Репозиторий для работы с учителями
      */
     private final TeacherRepository teacherRepository;
 
     /**
-     * TODO
+     * Mapper для преобразования данных учителей
      */
     private final TeacherMapper teacherMapper;
 
+    /**
+     * Репозиторий для работы с учениками
+     */
     private final StudentRepository studentRepository;
 
+    /**
+     * Репозиторий для работы с пользователями
+     */
     private final UserRepository userRepository;
 
 
@@ -76,10 +82,10 @@ public class TeacherService {
     }
 
     /**
-     * TODO
+     * Получает студентов, связанных с указанным учителем по его идентификатору.
      *
-     * @param id
-     * @return
+     * @param id идентификатор учителя.
+     * @return Объект ResponseTeacherWithStudentsDto, представляющий учителя и его студентов.
      */
     @Transactional
     public ResponseTeacherWithStudentsDto getStudentsByTeacherId(Long id) {
@@ -89,6 +95,12 @@ public class TeacherService {
         return teacherMapper.toDto(teacherDb);
     }
 
+    /**
+     * Добавляет ученика к указанному учителю по его идентификатору и адресу электронной почты ученика.
+     *
+     * @param id    идентификатор учителя.
+     * @param email адрес электронной почты ученика, которого нужно добавить.
+     */
     @Transactional
     public void addStudentToTeacher(Long id, String email) {
         Teacher teacherDb = teacherRepository.findById(id)

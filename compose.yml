@@ -1,4 +1,16 @@
 services:
+  app:
+    build:
+      context: .  # Путь к директории с Dockerfile
+      dockerfile: Dockerfile  # Имя Dockerfile
+    ports:
+      - "8080:8080"  # Проброс порта
+    env_file:
+      - .env
+    depends_on:
+      - postgresql
+    networks:
+      - naumen_dairy
   postgresql:
     container_name: postgresql-school-dairy
     image: postgres:16

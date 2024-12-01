@@ -1,5 +1,6 @@
 package ru.naumen.naumen_schooldairy.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
@@ -21,14 +22,18 @@ import ru.naumen.naumen_schooldairy.service.TeacherService;
 @Validated
 public class TeacherController {
 
+    /**
+     * Сервис для работы с учителями
+     */
     private final TeacherService teacherService;
 
     /**
-     * Возвращает конкретного учителя по его идентификатору.
+     * Получение информации об учителе по его идентификатору.
      *
      * @param id идентификатор учителя
-     * @return TODO
+     * @return ResponseEntity с информацией о запрашиваемом учителе
      */
+    @Operation(summary = "Информация об учителе", description = "Получение информации об учителе по его идентификатору.")
     @GetMapping("/{id}")
     public ResponseEntity<ResponseTeacherDto> getTeacherById(
             @NotNull @Positive @PathVariable("id") Long id) {
@@ -37,11 +42,13 @@ public class TeacherController {
     }
 
     /**
-     * Обновляет информацию о существующем учителе
+     * Обновление информации об учителе по его идентификатору.
      *
-     * @param id идентификатор учителя
-     *                     TODO
+     * @param id                идентификатор учителя
+     * @param requestTeacherDto объект запроса с новыми данными учителя
+     * @return ResponseEntity с обновленной информацией об учителе
      */
+    @Operation(summary = "Обновление информации об учителе", description = "Обновление информации об учителе по его идентификатору.")
     @PutMapping("/{id}")
     public ResponseEntity<ResponseTeacherDto> updateTeacher(
             @NotNull @Positive @PathVariable("id") Long id,
@@ -51,10 +58,13 @@ public class TeacherController {
     }
 
     /**
-     * Возвращает список учеников в классе по идентификатору учителя.
-     * <p>
-     * TODO
+     * Получение списка учеников, связанных с учителем по его идентификатору.
+     *
+     * @param id идентификатор учителя
+     * @return ResponseEntity с информацией об учениках данного учителя
      */
+    @Operation(summary = "Получение списка учеников, связанных с учителем",
+            description = "Получение списка учеников, связанных с учителем по его идентификатору.")
     @GetMapping("/students/{id}")
     public ResponseEntity<ResponseTeacherWithStudentsDto> getStudentsByTeacherId
     (@NotNull @Positive @PathVariable("id") Long id) {
@@ -62,6 +72,14 @@ public class TeacherController {
         return ResponseEntity.ok(responseTeacherWithStudentsDto);
     }
 
+    /**
+     * Добавление ученика к списку учеников учителя.
+     *
+     * @param id    идентификатор учителя
+     * @param email электронная почта ученика, которого необходимо добавить
+     * @return ResponseEntity без содержимого (204 No Content), если добавление прошло успешно
+     */
+    @Operation(summary = "Добавление ученика к списку учеников", description = "Добавление ученика к списку учеников учителя.")
     @PostMapping("/students/{id}")
     public ResponseEntity<Void> addStudentToTeacher(
             @NotNull @Positive @PathVariable("id") Long id,
