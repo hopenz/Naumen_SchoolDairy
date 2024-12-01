@@ -1,6 +1,5 @@
 services:
   app:
-    image: naumen_schooldairy:latest  # Имя образа вашего приложения
     build:
       context: .  # Путь к директории с Dockerfile
       dockerfile: Dockerfile  # Имя Dockerfile
@@ -10,6 +9,8 @@ services:
       - .env
     depends_on:
       - postgresql
+    networks:
+      - naumen_dairy
   postgresql:
     container_name: postgresql-school-dairy
     image: postgres:16
