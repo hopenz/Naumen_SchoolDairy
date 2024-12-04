@@ -6,6 +6,7 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -40,6 +41,7 @@ public class MarkController {
      */
     @Operation(summary = "Обновление оценки", description = "Обновление оценки ученика по заданному предмету и дате")
     @PutMapping
+    @PreAuthorize("hasRole('TEACHER')")
     public ResponseEntity<Void> updateMark(
             @Parameter(name = "subjectId") @NotNull @Positive @RequestParam("subjectId") Long subjectId,
             @Parameter(name = "studentId") @NotNull @Positive @RequestParam("studentId") Long studentId,

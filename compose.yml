@@ -1,10 +1,10 @@
 services:
   app:
     build:
-      context: .  # Путь к директории с Dockerfile
-      dockerfile: Dockerfile  # Имя Dockerfile
+      context: .
+      dockerfile: Dockerfile
     ports:
-      - "8080:8080"  # Проброс порта
+      - "8080:8080"
     env_file:
       - .env
     depends_on:

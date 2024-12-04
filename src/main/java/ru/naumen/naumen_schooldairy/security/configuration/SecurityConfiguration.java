@@ -11,9 +11,12 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.security.web.servlet.util.matcher.MvcRequestMatcher;
-import org.springframework.web.servlet.handler.HandlerMappingIntrospector;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import ru.naumen.naumen_schooldairy.security.jwt.JwtAuthenticationFilter;
+
+import java.util.List;
 
 /**
  * Конфигурационный класс для настройки безопасности приложения
@@ -38,15 +41,16 @@ public class SecurityConfiguration {
      */
     private final AuthenticationProvider authenticationProvider;
 
-    /**
-     * Создает бин для построения MvcRequestMatcher.
-     *
-     * @param introspector объект HandlerMappingIntrospector для анализа маршрутов.
-     * @return экземпляр MvcRequestMatcher. Builder для настройки маршрутов.
-     */
     @Bean
-    MvcRequestMatcher.Builder mvc(HandlerMappingIntrospector introspector) {
-        return new MvcRequestMatcher.Builder(introspector);
+    public CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration configuration = new CorsConfiguration();
+        configuration.setAllowedOrigins(List.of("*")); // Разрешить все источники
+        configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS")); // Разрешить методы
+        configuration.setAllowedHeaders(List.of("*")); // Разрешить любые заголовки
+
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", configuration);
+        return source;
     }
 
     private static final String[] SWAGGER_WHITELIST = {
@@ -66,16 +70,16 @@ public class SecurityConfiguration {
      * Настраивает цепочку фильтров безопасности.
      *
      * @param http объект HttpSecurity для настройки безопасности HTTP.
-     * @param mvc  объект MvcRequestMatcher. Builder для настройки маршрутов.
      * @return настроенная цепочка фильтров безопасности.
      * @throws Exception если возникает ошибка при настройке безопасности.
      */
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http, MvcRequestMatcher.Builder mvc) throws Exception {
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .csrf(AbstractHttpConfigurer::disable)
+                .cors(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers(mvc.pattern("/api/auth/**")).permitAll()
+                        .requestMatchers("/api/auth/**").permitAll()
                         .requestMatchers(SWAGGER_WHITELIST).permitAll()
                         .requestMatchers("/api/schedule/**", "/api/subject/**", "/api/marks/**",
                                 "/api/homeworks/**", "/api/teacher/**").hasRole("TEACHER")

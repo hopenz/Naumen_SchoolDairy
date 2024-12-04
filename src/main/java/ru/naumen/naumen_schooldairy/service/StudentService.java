@@ -4,6 +4,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.naumen.naumen_schooldairy.data.dto.student.*;
+import ru.naumen.naumen_schooldairy.data.entity.DailySchedule;
+import ru.naumen.naumen_schooldairy.data.entity.SchoolClass;
 import ru.naumen.naumen_schooldairy.data.entity.Student;
 import ru.naumen.naumen_schooldairy.data.mapper.student.StudentMapper;
 import ru.naumen.naumen_schooldairy.data.repository.StudentRepository;
@@ -11,6 +13,7 @@ import ru.naumen.naumen_schooldairy.exception.EntityNotFoundException;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
@@ -55,16 +58,14 @@ public class StudentService {
         Student studentDb = studentRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Student", id));
 
-        Student newStudent = studentMapper.toEntity(requestStudentDto);
-        newStudent.setId(id);
-        newStudent.setName(requestStudentDto.name());
-        newStudent.setSurname(requestStudentDto.surname());
-        newStudent.setPatronymic(requestStudentDto.patronymic());
-        newStudent.setDateOfBirth(requestStudentDto.dateOfBirth());
-        newStudent.setParentContact(requestStudentDto.parentContact());
-        newStudent.setPhoneNumber(requestStudentDto.phoneNumber());
+        studentDb.setName(requestStudentDto.name());
+        studentDb.setSurname(requestStudentDto.surname());
+        studentDb.setPatronymic(requestStudentDto.patronymic());
+        studentDb.setDateOfBirth(requestStudentDto.dateOfBirth());
+        studentDb.setParentContact(requestStudentDto.parentContact());
+        studentDb.setPhoneNumber(requestStudentDto.phoneNumber());
 
-        return studentMapper.toResponseDto(studentRepository.save(newStudent));
+        return studentMapper.toResponseDto(studentRepository.save(studentDb));
     }
 
     /**
@@ -104,7 +105,10 @@ public class StudentService {
      */
     @Transactional
     public ResponseStudentWithScheduleDto getStudentByIdAndDate(Long studentId, LocalDate dateDay) {
-        Student studentDb = studentRepository.findStudentByIdAndDate(studentId, dateDay);
+        Student studentDb = studentRepository.findById(studentId).orElseThrow(() -> new EntityNotFoundException("Student", studentId));
+        SchoolClass schoolClass = studentDb.getSchoolClass();
+        Set<DailySchedule> dailySchedules = schoolClass.getDailySchedules();
+        schoolClass.setDailySchedules(dailySchedules.stream().filter(schedule -> schedule.getDateDay().equals(dateDay)).collect(Collectors.toSet()));
         return studentMapper.toResponseWithSchedule(studentDb);
     }
 
